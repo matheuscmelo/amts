@@ -1,0 +1,132 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+<style>
+    ul {
+		padding: 0;
+        margin: 50px 20px;
+        list-style: none;
+    }
+    ul li {
+        margin: 5px;
+        display: inline-block;
+    }
+    ul li a {
+        padding: 5px;
+        display: inline-block;
+        border: 1px solid #f2f2f2;
+    }
+    ul li a img {
+        width: 125px;
+        height: 125px;
+        display: block;
+    }
+    ul li a:hover img {
+        transform: scale(2);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">AMTS</a>
+    <form class="form-inline">
+      <button (click)="logout()" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Sair</button>
+    </form>
+</nav>
+<div class="row justify-content-center h-100">
+    <div class="card col-xl-3">
+        <h4 class="card-title mb-4 mt-1">Editar informações</h4>
+        <article class="card-body">
+            <form [formGroup]="userForm" (ngSubmit)="onSubmitUser(userForm.value)">
+                <div class="form-group">
+                    <label for="phone">Celular</label>
+                    <input id="phone" name="phone" class="form-control" placeholder="(xx) xxxx-xxxx" type="phone" formControlName="phone">
+                </div>
+                <div class="form-group">
+                    <label for="address">Endereço</label>
+                    <input id="address" name="address" class="form-control" placeholder="R. XYZ, nº 123" type="address" formControlName="address">
+                </div>
+                <div class="form-group">
+                    <label for="professional_email">Email profissional</label>
+                    <input id="professional_email" name="professional_email" class="form-control" placeholder="seunome@empresa.com" type="professional_email" formControlName="professional_email">
+                </div>
+                <div class="form-group">
+                    <label for="professional_title">Cargo</label>
+                    <input id="professional_title" name="professional_title" class="form-control" placeholder="Engenheiro de xxx" type="professional_title" formControlName="professional_title">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Autorizo x</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck2">
+                    <label class="form-check-label" for="exampleCheck2">Autorizo y</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck3">
+                    <label class="form-check-label" for="exampleCheck3">Autorizo z</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck4">
+                    <label class="form-check-label" for="exampleCheck4">Autorizo a</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Atualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </article>
+    </div>
+    <div class="col-xl-1"></div>
+    <div class="card col-xl-4">
+        <h4 class="card-title mb-4 mt-1">Imagens</h4>
+        <article class="card-body">
+            <ul>
+            <div class="row">
+                    <div *ngFor="let image of this.getUserImages()">
+                        <div class="col-sm-4">
+                            <li><a href="#"><img src="{{image.image}}"></a></li>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+            <form [formGroup]="imageForm" (ngSubmit)="onSubmitImage(imageForm.value)">
+                <div class="form-group">
+                    <label for="image">Adicionar Imagem</label>
+                    <div id="image" class="custom-file">
+                        <input #fileInput type="file" class="custom-file-input" id="customFile" formControlName="image">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>
+<p></p>
+
+<div class="row justify-content-center h-100" *ngIf="this.requests.length > 0">
+    <div class="col-xl-6 justify-content-center card">
+        <h4 class="card-title mb-4 mt-1">Contas pendentes</h4>
+        <div class="card" *ngFor="let request of this.requests">
+            <article class="card-body">
+                <div class="row">
+                <div class="col-sm-10">
+                    <p>Email: {{request.email}}</p>
+                    <p>Celular: {{request.phone}}</p>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-success" (click)="approveRequest(request.id)">Aprovar</button>
+                    <button type="button" class="btn btn-danger" (click)="disapproveRequest(request.id)">Desaprovar</button>
+                </div>
+            </div>
+            </article>
+        </div>
+        <p></p>
+    </div>
+</div>

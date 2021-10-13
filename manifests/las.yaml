@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    amts.app: las
+  creationTimestamp: null
+  labels:
+    amts.app: las
+  name: las
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      amts.app: las
+  template:
+    metadata:
+      annotations:
+        amts.app: las
+      labels:
+        amts.app: las
+    spec:
+      containers:
+      - image: sconecuratedimages/kubernetes:las
+        name: las
+        resources: {}
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+status: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: las
+  labels:
+    amts.app: las
+spec:
+  selector:
+    amts.app: las
+  type: ClusterIP
+  ports:
+  - port: 18766
+    targetPort: 18766
+    protocol: TCP

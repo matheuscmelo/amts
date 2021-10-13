@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    amts.app: amts-api
+  creationTimestamp: null
+  labels:
+    amts.app: amts-api
+  name: amts-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      amts.app: amts-api
+  template:
+    metadata:
+      annotations:
+        amts.app: amts-api
+      labels:
+        amts.app: amts-api
+    spec:
+      containers:
+      - image: matheusmelo/amts_api
+        securityContext:
+          privileged: true
+        name: api
+        resources: {}
+        env:
+        - name: SCONE_CAS_ADDR
+          value: scone-cas.cf
+        - name: SCONE_CONFIG_ID
+          value: amts/application
+        - name: SCONE_HEAP
+          value: "100000000"
+        - name: SCONE_ALPINE
+          value: "1"
+        - name: SCONE_VERSION
+          value: "1"
+        - name: SCONE_LAS_ADDR
+          value: las:18766
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend:
+    restart: 'always'
+    command: './run.sh'
+    build: .
+    volumes:
+        - ./:/app
+    environment:
+        - ENVIRONMENT=dev
+        - DEBUG=1
+        - SMTP_PASSWORD=""
+        - HOST=amts.mmelo.me
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 5000:5000

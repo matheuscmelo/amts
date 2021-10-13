@@ -1,0 +1,54 @@
+version: '3'
+services:
+  api:
+    privileged: true
+    restart: 'always'
+    image: matheusmelo/amts_api
+    build: ./backend
+#    command: "sleep 10m"
+    environment:
+      - ENVIRONMENT=prod
+      - DEBUG=1
+      - ADMIN_EMAIL=admin@amts.com
+      - ADMIN_PASSWORD=12345
+      - SMTP_PASSWORD=""
+      - HOST=amts.mmelo.me
+      - DATABASE_URI=mysql+pymysql://amts:supersecret@mariadb:3306/db
+      - DATABASE_PASSWORD=supersecret
+      - DATABASE_USER=amts
+      - SCONE_CAS_ADDR=scone-cas.cf
+      - SCONE_CONFIG_ID=amts/application
+      - SCONE_HEAP=100000000
+      - SCONE_ALPINE=1
+      - SCONE_VERSION=1
+      - SCONE_LAS_ADDR=las:18766
+    depends_on:
+      - mariadb
+      - las
+    ports:
+      - 5000:5000
+
+  las:
+    image: sconecuratedimages/kubernetes:las
+    privileged: true
+
+  nginx:
+    image: nginx
+    restart: 'always'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+
+  frontend:
+    build: ./frontend
+    restart: 'always'
+
+  mariadb:
+    image: bitnami/mariadb
+    restart: 'always'
+    environment:
+      - MARIADB_ROOT_PASSWORD=supersecret
+      - MARIADB_USER=amts
+      - MARIADB_PASSWORD=supersecret
+      - MARIADB_DATABASE=db
